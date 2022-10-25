@@ -1,4 +1,4 @@
-from .default import *
+from myproject.config.default import *
 
 
 SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(os.path.join(BASE_DIR, "myproject.db"))
