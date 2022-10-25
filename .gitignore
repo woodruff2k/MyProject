@@ -1,5 +1,7 @@
+.DS_Store
 .idea
-pybo.db
-*.pyc
 __pycache__
+backup
+examples
 logs
+*.pyc

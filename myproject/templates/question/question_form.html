@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+        <form method="post" class="post-form my-3">
+            {{ form.csrf_token }}
+            {% include "form_errors.html" %}
+            <div class="form-group">
+                {# form.subject.label #}
+                <label for="subject">제목</label>
+                {# form.subject(class="form-control") #}
+                <input type="text" class="form-control" name="subject" id="subject" value="{{ form.subject.data or '' }}" />
+            </div><!-- form-group -->
+            <div class="form-group">
+                {# form.content.label #}
+                <label for="content">내용</label>
+                {# form.content(class="form-control") #}
+                <textarea class="form-control" name="content" id="content" rows="10">{{ form.content.data or "" }}</textarea>
+            </div><!-- form-group -->
+            <button type="submit" class="btn btn-primary">저장하기</button>
+        </form>
+    </div>
+{% endblock %}
+<!--
+            {# errors from form.validate_on_submit in QuestionForm #}
+            {% for field, errors in form.errors.items() %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>{{ form[field].label }}</strong>: {{ ', '.join(errors) }}
+                </div>
+            {% endfor %}
+-->
