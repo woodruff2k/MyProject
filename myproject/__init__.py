@@ -1,8 +1,8 @@
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from sqlalchemy import MetaData
-from flask import Flask
 from . import config
 
 
@@ -19,12 +19,17 @@ migrate = Migrate()
 login_manager = LoginManager()
 
 
+def page_not_found(e):
+    return render_template("404.html"), 404
+
+
 def create_app():
     app = Flask(__name__)
     # app.config.from_object(config)
+    app.config.from_pyfile("/Users/sangwook.seo/Developments/pipeline/flaskbook/myproject/config/development.py")
     # export APP_CONFIG_FILE=/Users/sangwook.seo/Developments/pipeline/flaskbook/myproject/config/development.py
     # export APP_CONFIG_FILE=/Users/sangwook.seo/Developments/pipeline/flaskbook/myproject/config/production.py
-    app.config.from_envvar("APP_CONFIG_FILE")
+    # app.config.from_envvar("APP_CONFIG_FILE")
 
     # ORM 초기화
     from . import models
@@ -47,5 +52,11 @@ def create_app():
     # Filter 초기화
     from .filter import format_datetime
     app.jinja_env.filters["datetime"] = format_datetime
+
+    # Handler 초기화
+    # 공통으로 적용할 HTTP 404과 500 에러 핸들러를 설정
+    # 첫 번째 키는 blueprint, None는 어플리케이션 단위
+    # app.error_handler_spec[None][404] = page_not_found
+    app.register_error_handler(404, page_not_found)
 
     return app
