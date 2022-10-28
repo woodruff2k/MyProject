@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for, redirect, session, g
+from flask import Blueprint, url_for, redirect, session, g, current_app
 # from werkzeug.utils import redirect
 from flask_login import login_required
 from ..views.auth_views import admin_login_required
@@ -21,11 +21,12 @@ def load_logged_in_user():
 @bp.route("/hello")
 # @admin_login_required
 @login_required
-def hello_pybo():
-    return "Hello, Pybo!"
+def hello():
+    return "Hello, MyProject!"
 
 
 @bp.route("/")
 def index():
-    # return "Pybo index"
+    # return "index"
+    current_app.logger.info("INFO 레벨로 출력")
     return redirect(url_for("question.list_"))
