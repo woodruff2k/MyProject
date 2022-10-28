@@ -26,10 +26,11 @@ def page_not_found(e):
 def create_app():
     app = Flask(__name__)
     # app.config.from_object(config)
-    app.config.from_pyfile("/Users/sangwook.seo/Developments/pipeline/flaskbook/myproject/config/development.py")
+    # app.config.from_pyfile("/Users/sangwook.seo/Developments/pipeline/flaskbook/myproject/config/development.py")
+    # app.config.from_pyfile("/Users/sangwook.seo/Developments/pipeline/flaskbook/myproject/config/production.py")
     # export APP_CONFIG_FILE=/Users/sangwook.seo/Developments/pipeline/flaskbook/myproject/config/development.py
     # export APP_CONFIG_FILE=/Users/sangwook.seo/Developments/pipeline/flaskbook/myproject/config/production.py
-    # app.config.from_envvar("APP_CONFIG_FILE")
+    app.config.from_envvar("APP_CONFIG_FILE")
 
     # ORM 초기화
     from . import models
