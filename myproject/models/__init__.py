@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from myproject import db
+from .. import db
 
 
 class Question(db.Model):
@@ -52,8 +52,8 @@ class User(db.Model, UserMixin):
     username   = db.Column(db.String(25), unique=True)  # db.String(100)
     email      = db.Column(db.String(50), unique=True)
     password   = db.Column(db.String(120))              # db.String(255)
-    created_at = db.Column(db.DateTime)
 
+    created_at = db.Column(db.DateTime)
     rank       = db.Column(db.Integer, default=1)
     point      = db.Column(db.Integer, default=0)
 

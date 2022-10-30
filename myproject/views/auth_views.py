@@ -12,7 +12,6 @@ from .. import db, login_manager
 bp = Blueprint("users", __name__, url_prefix="/users")
 
 
-# @login_manager.user_loader
 @bp.before_request
 def load_logged_in_user():
     user_id = session.get("user_id")
@@ -20,6 +19,12 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = User.query.get(user_id)
+
+
+# for flask_login (current_user)
+@login_manager.user_loader
+def load_user(user_id):  # user.id
+    return User.query.get(user_id)
 
 
 def login_required(view):
@@ -37,12 +42,6 @@ def login_required(view):
 
 
 # for flask_login (current_user)
-@login_manager.user_loader
-def load_user(user_id):  # user.id
-    # return User.query.filter(User.id == user_id).first()
-    return User.query.get(user_id)
-
-
 def admin_login_required(f):
 
     @wraps(f)
@@ -59,9 +58,8 @@ def admin_login_required(f):
 
 
 # @bp.route("/signup/", methods=["GET", "POST"])
-# def signup():
 @bp.route("/regist", methods=["GET", "POST"])
-def regist():
+def regist():  # signup():
     form = UserCreateForm()
     if request.method == "POST" and form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -91,7 +89,7 @@ def login():
         if error is None:
             session.clear()
             session["user_id"] = user.id
-            # for flask_login
+            # for flask_login (current_user)
             login_user(user)
             return redirect(url_for("main.index"))
         flash(error)
@@ -101,6 +99,6 @@ def login():
 @bp.route("/logout")
 def logout():
     session.clear()
-    # for flask_login
+    # for flask_login (current_user)
     logout_user()
     return redirect(url_for("main.index"))

@@ -1,7 +1,6 @@
 from flask import Blueprint, url_for, redirect, request, render_template, session, g, flash
 # from werkzeug.utils import redirect
 from datetime import datetime
-
 from .auth_views import login_required
 from ..models import Question, Answer, User
 from ..forms import AnswerForm
@@ -11,7 +10,6 @@ from .. import db
 bp = Blueprint("answer", __name__, url_prefix="/answer")
 
 
-# @login_manager.user_loader
 @bp.before_request
 def load_logged_in_user():
     user_id = session.get("user_id")

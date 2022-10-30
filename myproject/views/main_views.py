@@ -1,14 +1,13 @@
 from flask import Blueprint, url_for, redirect, session, g, current_app
 # from werkzeug.utils import redirect
 from flask_login import login_required
-from ..views.auth_views import admin_login_required
+# from ..views.auth_views import admin_login_required
 from ..models import User
 
 
 bp = Blueprint("main", __name__, url_prefix="/")
 
 
-# @login_manager.user_loader
 @bp.before_request
 def load_logged_in_user():
     user_id = session.get("user_id")

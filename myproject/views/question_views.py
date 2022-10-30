@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, g, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, g, flash, current_app
 # from werkzeug.utils import redirect
+from sqlalchemy import func, nullslast
 from datetime import datetime
 from .auth_views import login_required
 from ..forms import QuestionForm, AnswerForm
@@ -10,7 +11,6 @@ from .. import db
 bp = Blueprint("question", __name__, url_prefix="/question")
 
 
-# @login_manager.user_loader
 @bp.before_request
 def load_logged_in_user():
     user_id = session.get("user_id")
@@ -20,12 +20,20 @@ def load_logged_in_user():
         g.user = User.query.get(user_id)
 
 
+def _nullslast(obj):
+    if current_app.config["SQLALCHEMY_DATABASE_URI"].startswith("sqlite"):
+        return obj
+    else:
+        return nullslast(obj)
+
+
 @bp.route("/list/")
 def list_():
     page_num = request.args.get("page", type=int, default=1)
     # question_list = Question.query.order_by(Question.created_at.desc())                 # BaseQuery obj
     # question_list = question_list.paginate(page_num, per_page=10).items                 # list obj
     # return render_template("question/question_list.html", question_list=question_list)  # list obj
+    # question_query = Question.query.order_by(Question.created_at.desc())                # BaseQuery obj
     question_query = Question.query.order_by(Question.created_at.desc())                  # BaseQuery obj
     question_page = question_query.paginate(page_num, per_page=10)                        # Pagination obj
     return render_template("question/question_list.html", question_page=question_page)    # list obj
